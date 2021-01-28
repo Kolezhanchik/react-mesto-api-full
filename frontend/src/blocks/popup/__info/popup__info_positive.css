@@ -1,0 +1,6 @@
+.popup__info_positive{
+    background-image: url('../../../images/positive.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}

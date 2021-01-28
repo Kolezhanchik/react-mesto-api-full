@@ -1,0 +1,12 @@
+.header__link{
+    font-family: inherit;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 1.22;
+    text-align: right;
+    color: #A9A9A9;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}

@@ -1,0 +1,27 @@
+.form-auth__btn{
+    width: 358px;
+    height: 50px;
+    background: #FFFFFF;
+    border-radius: 2px;
+    font-family: inherit;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 1.2;
+    text-align: center;
+    color: #000000;
+    margin: auto auto 0;
+    padding: 0;
+    outline: none;
+}
+
+.popup__btn:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 540px) {
+    .form-auth__btn{
+        width: 81%;
+    }
+}

@@ -1,0 +1,17 @@
+.header__wrap_loggedin-mob{
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    padding: 0;
+    height: 142px;  
+}
+
+.header__wrap_loggedin-mob::before {
+    content: '';
+    width: 100%;
+    height: 1px;
+    background-color: #545454;
+    position: absolute;
+    bottom: 103px;
+    left: 0;
+}

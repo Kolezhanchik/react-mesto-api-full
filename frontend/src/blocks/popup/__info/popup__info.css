@@ -1,0 +1,10 @@
+.popup__info{
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border-width: 5px;
+    border-style: solid;
+    text-align: center;
+    margin: 26px auto 32px;
+    padding: 0;
+}

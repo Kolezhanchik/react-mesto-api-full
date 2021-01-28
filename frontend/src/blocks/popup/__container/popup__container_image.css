@@ -1,0 +1,11 @@
+.popup__container_image {
+    max-width: fit-content;  
+    padding: 0;
+    background-color: transparent;
+}
+
+@media screen and (max-width: 1200px){
+    .popup__container_image {
+        margin: calc(55vh - 345px) auto 0;
+    }
+}

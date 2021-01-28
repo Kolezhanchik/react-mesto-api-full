@@ -1,0 +1,6 @@
+.popup__info_negative{
+    background-image: url('../../../images/negative.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
