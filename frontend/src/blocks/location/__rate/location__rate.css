@@ -1,0 +1,29 @@
+.location__rate {
+    font-family: inherit;
+    color: inherit;
+    padding: 0;
+    margin: 0;
+    font-size: 25px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+.location__rate::before {
+    content: ' \2661';
+}
+
+.location__rate:hover {
+    cursor: pointer;
+    animation: beating 1s ease-in-out infinite;
+}
+
+@keyframes beating {
+    from {
+        color: inherit;
+        transform: scale(1);
+}
+    to {
+        color: #E5E5E5;
+        transform: scale(1.2);
+    }
+  } 

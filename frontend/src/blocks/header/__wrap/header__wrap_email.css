@@ -1,0 +1,5 @@
+.header__wrap_email{
+    margin: 0 0 0 auto;
+    display: flex;
+    transition: all ease-in-out 0.7s;
+}

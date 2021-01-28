@@ -1,0 +1,12 @@
+.header__wrap_logo{
+    display: flex;
+}
+
+@media screen and (max-width: 540px) {
+    .header__wrap_logo {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        height: auto;
+    }
+}

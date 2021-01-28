@@ -1,0 +1,14 @@
+.location__image {
+    min-width: 282px;
+    height: 78%;
+    display: inline-block;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    line-height: 20em;
+}
+
+@media screen and (max-width: 890px) {    
+    .location__image {
+        min-width: 100%;
+    }   
+}

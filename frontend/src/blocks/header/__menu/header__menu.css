@@ -1,0 +1,19 @@
+.header__menu{
+    display: none;
+    margin: 0 0 0 auto;
+    font-size: 30px;
+    font-weight: 900;
+    -webkit-transition: all ease-in-out 0.6s;
+    -o-transition: all ease-in-out 0.6s;
+    transition: all ease-in-out 0.6s;
+    background-color: transparent;    
+    color: #ffffff;
+    border: none;
+    outline: none;
+}
+
+@media screen and (max-width: 540px) {
+    .header__menu{
+        display: block;
+    }
+}

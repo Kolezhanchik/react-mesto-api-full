@@ -1,0 +1,3 @@
+.location__rate_marked::before {
+    content: ' \2665';
+}

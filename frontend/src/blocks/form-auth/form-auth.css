@@ -1,0 +1,8 @@
+.form-auth{
+    padding: 60px 0 112px;
+    height: 55vh;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}

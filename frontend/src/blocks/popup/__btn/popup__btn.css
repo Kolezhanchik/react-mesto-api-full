@@ -1,0 +1,22 @@
+.popup__btn {
+    margin: 48px 0 0;
+    width: 100%;
+    padding: 14px 0 18px;
+    background-color: #000000;
+    color: #ffffff;
+    text-align: center;
+    font-family: inherit;
+    font-size: 18px;
+    line-height: 1.2;
+    border: none;
+    border-radius: 2px;
+    -webkit-transition: opacity ease-in-out 0.6s;
+    -o-transition: opacity ease-in-out 0.6s;
+    transition: opacity ease-in-out 0.6s; 
+    outline: none;
+}
+
+.popup__btn:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
