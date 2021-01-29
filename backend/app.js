@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const app = express();
 const mongoose = require('mongoose');
 const usersRouter = require('./routes/users');
@@ -22,9 +23,22 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useFindAndModify: false,
 });
 
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+
+// const allowedCors = [
+//   'https://kolenhen.students.nomoredomains.icu',
+//   'https://api.kolenhen.students.nomoredomains.icu',
+//   'http://localhost:3000',
+// ];
+
+// app.use(cors({
+//   origin: allowedCors,
+// }));
+
+app.use(cors());
 
 app.use(requestLogger);
 app.get('/crash-test', () => {
