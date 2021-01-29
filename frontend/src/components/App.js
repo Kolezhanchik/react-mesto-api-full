@@ -43,25 +43,31 @@ function App() {
 
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');
+    if(loggedIn && jwt){
     setIsCardsLoading(true);
     api.getInitialCards(jwt)
-      .then((data) => {
+      .then((data) => {        
         setCards(data);
       })
       .catch((error) => { alert(error) })
       .finally(() => {
         setIsCardsLoading(false);
       });
-  }, []);
+    }
+  }, [loggedIn]);
 
   useEffect(() => {
-    const jwt = localStorage.getItem('jwt');
+    const jwt = localStorage.getItem('jwt');      
+    if(loggedIn && jwt){      
     api.getInitialProfile(jwt)
       .then((data) => {
-        setCurrentUser(data);
+        console.log(data);
+        setCurrentUser(data);        
       })
       .catch((error) => { alert(error) });
-  }, []);
+    }
+  }, [loggedIn]);
+
 
   // popup closing by ESC
   useEffect(() => {
@@ -188,17 +194,17 @@ function App() {
   function handleLogOut() {
     setLoggedIn(false);
     localStorage.removeItem('jwt');
-    history.push('/sign-in');
+    history.push('/signin');
   }
 
   const handleTokenCheck = useCallback(() => {
     if (localStorage.getItem('jwt')) {
       const jwt = localStorage.getItem('jwt');
-      if (jwt) {
+      if (loggedIn && jwt) {
         checkToken(jwt)
           .then((res) => {
             if (res) {
-              setCurrentUserEmail(res.data.email);
+              setCurrentUserEmail();
               setLoggedIn(true);
               history.push('/');
             }
@@ -206,7 +212,7 @@ function App() {
       }
     }
   },
-    [history, setLoggedIn, setCurrentUserEmail]
+    [history, setLoggedIn, loggedIn, setCurrentUserEmail]
   )
 
   useEffect(() => {
@@ -223,7 +229,8 @@ function App() {
     }
     auth.authorize(values)
       .then((data) => {
-        if (data) {
+        if (data.token) {
+          localStorage.setItem('jwt', data.token);
           setLoggedIn(true);
           history.push('/');
         }
@@ -232,13 +239,14 @@ function App() {
   }
 
   function handleRegister(values, resetForm) {
+    console.log(values);
     auth.register(values)
       .then((res) => {
         if (res) {
           handleTooltipOpen();
           setTooltipMessage('Вы успешно зарегистрировались!');
           setTooltipType('positive');
-          history.push('/sign-in');
+          history.push('/signin');
           resetForm();
         }
         else {
@@ -257,7 +265,7 @@ function App() {
         userEmail={currentUserEmail}
       />
       <Switch>
-        <Route path="/sign-up">
+        <Route path="/signup">
           <Register
             onTooltipOpen={handleTooltipOpen}
             message={setTooltipMessage}
@@ -265,7 +273,7 @@ function App() {
             handleRegister={handleRegister}
           />
         </Route>
-        <Route path="/sign-in">
+        <Route path="/signin">
           <Login
             handleLogin={handleLogin}
           />

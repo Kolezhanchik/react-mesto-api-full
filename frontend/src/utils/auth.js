@@ -1,5 +1,8 @@
 // export const BASE_URL = "https://auth.nomoreparties.co";
-export const BASE_URL = "http://api.kolenhen.students.nomoredomains.icu";
+// export const BASE_URL = "http://api.kolenhen.students.nomoredomains.icu";
+
+export const BASE_URL = "http://localhost:3000";
+
 export const register = (data) => {
 
     return fetch(`${BASE_URL}/signup`, {
@@ -29,19 +32,20 @@ export const authorize = (data) => {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
+            _id: data.id,
             email: data.email,
-            password: data.password
+            password: data.password            
         })
     })
         .then((res) => {
             return res.json();
         })
-        .then((data) => {
-            if (data.token) {
-                localStorage.setItem('jwt', data.token);
-                return data;
-            }
-        })
+        // .then((data) => {
+        //     if (data.token) {
+        //         localStorage.setItem('jwt', data.token);
+        //         return data;
+        //     }
+        // })
         .catch((err) => console.log(err));
 }
 

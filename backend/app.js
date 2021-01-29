@@ -28,36 +28,40 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-// const allowedCors = [
-//   'https://kolenhen.students.nomoredomains.icu',
-//   'https://api.kolenhen.students.nomoredomains.icu',
-//   'http://localhost:3000',
-// ];
+const allowedCors = [
+  // 'https://kolenhen.students.nomoredomains.icu',
+  // 'https://api.kolenhen.students.nomoredomains.icu',
+  'http://localhost:3000',
+  'http://localhost:3001',
+];
 
-// app.use(cors({
-//   origin: allowedCors,
-// }));
+app.use(cors({
+  origin: allowedCors,
+}));
 
-app.use(cors());
+// app.use(cors());
 
-app.use(requestLogger);
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
-  }, 0);
-});
+// app.use(requestLogger);
+// app.get('/crash-test', () => {
+//   setTimeout(() => {
+//     throw new Error('Сервер сейчас упадёт');
+//   }, 0);
+// });
+// app.post('signup',  createUser);
+// app.post('signin', login);
 app.post('/signup', createUserValidator, createUser);
 app.post('/signin', loginValidator, login);
-app.use('*', notFoundRouter);
 
-app.use(auth);
 
+//app.use(auth);
+// app.use('/users', usersRouter);
+// app.use('/cards', cardsRouter);
 app.use('/users', auth, usersRouter);
 app.use('/cards', auth, cardsRouter);
 app.use(errorLogger);
 app.use(celebrateErrorHandler);
 app.use(errorsHandler);
-
+app.use('*', notFoundRouter);
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });

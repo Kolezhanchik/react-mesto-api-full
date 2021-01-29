@@ -16,7 +16,7 @@ function MainPageForm(props) {
                 className={`form-auth__btn form-auth__btn_type_${props.name} ${props.isDisabled && 'form-auth__btn_disabled'}`} >
                 {props.btnText}
             </button>
-            <p className="form-auth__text">{props.text} <Link className="form-auth__link" to="/sign-in">{props.linkText}</Link></p>
+            <p className="form-auth__text">{props.text} <Link className="form-auth__link" to="/signin">{props.linkText}</Link></p>
         </form>
     )
 }

@@ -4,15 +4,15 @@ class Api {
     this._headers = options.headers;
   }
 
-  _responseHandler(res) {
-    if (res.ok) {
+  _responseHandler(res) {    
+    if (res.ok) {      
       return res.json();
     }
     return Promise.reject(`Error happen: ${res.status}`);
   }
 
-  getInitialData() {
-    return Promise.all([this.getInitialProfile(), this.getInitialCards()]);
+  getInitialData(jwt) {
+    return Promise.all([this.getInitialProfile(jwt), this.getInitialCards(jwt)]);
   }
 
   getInitialCards(jwt) {
@@ -123,7 +123,8 @@ class Api {
 
 const api = new Api({
   // url: 'https://mesto.nomoreparties.co/v1/cohort-16/',
-  url: 'http://api.kolenhen.students.nomoredomains.icu',
+  // url: 'http://api.kolenhen.students.nomoredomains.icu/',
+  url: 'http://localhost:3000/',
   //  headers: {
   //    uthorization: 'cbe4503b-5ebe-4451-a159-203687412eb7',
   //   'Content-Type': 'application/json',

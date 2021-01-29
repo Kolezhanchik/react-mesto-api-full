@@ -1,5 +1,4 @@
 const errorsHandler = (err, req, res, next) => {
-console.log(err.name);
     const error = {
       name: err.name,
       statusCode: err.statusCode,
