@@ -1,15 +1,11 @@
 const jwt = require('jsonwebtoken');
-
 const { NODE_ENV, JWT_SECRET } = process.env;
+const { AuthorizationError } = require('../middlewares/error-handler');
 
-module.exports = (res, req, next) => {
+module.exports = (req, res, next) => {
   const { authorization } = req.headers;
+  if (!authorization || !authorization.startsWith('Bearer ')) throw new AuthorizationError('Необходима авторизация, нет токена');
 
-  if (!authorization || !authorization.startsWith('Bearer ')) {
-    return res
-      .status(401)
-      .send({ message: 'Необходима авторизация' })
-  }
   const token = authorization.replace('Bearer ', '');
 
   let payload;
@@ -17,12 +13,9 @@ module.exports = (res, req, next) => {
     payload = jwt.verify(token,
       NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
   } catch (err) {
-    return res
-      .status(401)
-      .send({ message: 'Необходима авторизация' });
+    throw new AuthorizationError('Необходима авторизация, токен не валиден');
   }
+
   req.user = payload;
   next();
-  return true;
 };
-

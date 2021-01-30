@@ -16,7 +16,7 @@ const getUsers = (req, res, next) => {
 };
 
 const getUserByID = (req, res, next) => {
-  User.findById(req.params.id)
+  User.findById(req.user._id)
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Нет пользователя с таким id');
@@ -27,8 +27,7 @@ const getUserByID = (req, res, next) => {
 };
 
 const getUser = (req, res, next) => {
-console.log(req.params.id);
-  User.findById(req.params.id)
+  User.findById(req.user._id)
     .then((user) => {
       if (!user) {
       throw new NotFoundError('Нет пользователя с таким id');

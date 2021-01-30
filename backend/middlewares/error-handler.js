@@ -85,6 +85,13 @@ class Conflict extends Error {
     this.statusCode = 409;
   }
 }
+class AuthorizationError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = 401;
+  }
+}
 
-module.exports = { NotFoundError, errorsHandler, UnauthorizedError, Conflict, badRequestError };
+
+module.exports = { NotFoundError, errorsHandler, AuthorizationError, UnauthorizedError, Conflict, badRequestError };
 

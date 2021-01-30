@@ -9,7 +9,7 @@ const {
 usersRouter.get('/', getUsers);
 usersRouter.get('/me', getUser);
 usersRouter.get('/:id', getUserByIDValidator, getUserByID);
-usersRouter.get('/me', userInfoUpdateValidator, userInfoUpdate);
+usersRouter.patch('/me', userInfoUpdateValidator, userInfoUpdate);
 usersRouter.patch('/me/avatar', userAvatarUpdateValidator, userAvatarUpdate);
 
 module.exports = usersRouter;

@@ -1,11 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
 
-// const idParams = {
-//   params: Joi.object().keys({
-//     id: Joi.string().length(24).required(),
-//   }),
-// };
-
 const loginValidator = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
@@ -31,14 +25,15 @@ const getUserByIDValidator = celebrate({
 
 const userInfoUpdateValidator = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30).required,
-    about: Joi.string().min(2).max(30).required,
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
   }),
 });
 
-const userAvatarUpdateValidator = celebrate({
+const userAvatarUpdateValidator =  celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().uri().required,
+    avatar: Joi.string().required()
+      .regex(/^(https?:\/\/)?([\da-z.-]+).([a-z.]{2,6})([/\w.-]*)*\/?$/),
   }),
 });
 
@@ -49,26 +44,24 @@ const createCardValidator = celebrate({
   }),
 });
 
+
 const delCardValidator = celebrate({
-  params: Joi.object().keys({
-    id: Joi.string().length(24).required(),
+  body: Joi.object().keys({
+    cardId: Joi.string().hex().length(24),
   }),
-  cookies: Joi.object().keys({
-    jwt: Joi.string().required(),
-  }).unknown(),
 });
 
 const addLikeValidator = celebrate({
-  params: Joi.object().keys({
-    id: Joi.string().length(24).required(),
-  }),
-});
+    body: Joi.object().keys({
+      cardId: Joi.string().hex().length(24),
+    }),
+  });
 
-const delLikeValidator = celebrate({
-  params: Joi.object().keys({
-    id: Joi.string().length(24).required(),
-  }),
-});
+const delLikeValidator =   celebrate({
+    body: Joi.object().keys({
+      cardId: Joi.string().hex().length(24),
+    }),
+  });
 
 module.exports = {
   loginValidator,

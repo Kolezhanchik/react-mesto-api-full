@@ -23,14 +23,13 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useFindAndModify: false,
 });
 
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
 const allowedCors = [
-  // 'https://kolenhen.students.nomoredomains.icu',
-  // 'https://api.kolenhen.students.nomoredomains.icu',
+  'https://kolenhen.students.nomoredomains.icu',
+  'https://api.kolenhen.students.nomoredomains.icu',
   'http://localhost:3000',
   'http://localhost:3001',
 ];
@@ -39,23 +38,21 @@ app.use(cors({
   origin: allowedCors,
 }));
 
-// app.use(cors());
+app.use(cors());
 
-// app.use(requestLogger);
-// app.get('/crash-test', () => {
-//   setTimeout(() => {
-//     throw new Error('Сервер сейчас упадёт');
-//   }, 0);
-// });
-// app.post('signup',  createUser);
-// app.post('signin', login);
+app.use(requestLogger);
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
+
 app.post('/signup', createUserValidator, createUser);
 app.post('/signin', loginValidator, login);
 
+// app.use(auth);
 
-//app.use(auth);
-// app.use('/users', usersRouter);
-// app.use('/cards', cardsRouter);
 app.use('/users', auth, usersRouter);
 app.use('/cards', auth, cardsRouter);
 app.use(errorLogger);

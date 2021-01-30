@@ -1,7 +1,7 @@
-const { isCelebrateValid } = require('celebrate');
+const { isCelebrateError } = require('celebrate');
 
 const celebrateErrorHandler = (err, req, res, next) => {
-  if (isCelebrateValid(err)) {
+  if (isCelebrateError(err)) {
     res.status(400).send({
       message: 'Переданные данные не корректны',
     });

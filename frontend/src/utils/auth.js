@@ -1,7 +1,8 @@
 // export const BASE_URL = "https://auth.nomoreparties.co";
-// export const BASE_URL = "http://api.kolenhen.students.nomoredomains.icu";
+// export const BASE_URL = "http://localhost:3000";
+export const BASE_URL = "http://api.kolenhen.students.nomoredomains.icu";
 
-export const BASE_URL = "http://localhost:3000";
+
 
 export const register = (data) => {
 
@@ -40,12 +41,6 @@ export const authorize = (data) => {
         .then((res) => {
             return res.json();
         })
-        // .then((data) => {
-        //     if (data.token) {
-        //         localStorage.setItem('jwt', data.token);
-        //         return data;
-        //     }
-        // })
         .catch((err) => console.log(err));
 }
 
