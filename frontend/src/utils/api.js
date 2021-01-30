@@ -1,7 +1,6 @@
 class Api {
-  constructor(options) {
-    this._url = options.url;
-    this._headers = options.headers;
+  constructor({ url }) {
+    this._url = url;
   }
 
   _responseHandler(res) {
@@ -11,38 +10,38 @@ class Api {
     return Promise.reject(`Error happen: ${res.status}`);
   }
 
-  getInitialData() {
-    return Promise.all([this.getInitialProfile(), this.getInitialCards()]);
+  getInitialData(jwt) {
+    return Promise.all([this.getInitialProfile(jwt), this.getInitialCards(jwt)]);
   }
 
   getInitialCards(jwt) {
-    return fetch(`${this._url}cards`, {
-      method: 'GET',
+    return fetch(`${this._url}cards`, {      
       headers: {
+        'content-type': 'application/json',
         authorization: `Bearer ${jwt}`,
-        'Content-Type': 'application/json',
-      }
+      },
+      method: 'GET',
     })
       .then(this._responseHandler);
   }
 
   getInitialProfile(jwt) {
-    return fetch(`${this._url}users/me`, {
-      method: 'GET',
-      headers: {
+       return fetch(`${this._url}users/me`, {
+       headers: {
+        'content-type': 'application/json',
         authorization: `Bearer ${jwt}`,
-        'Content-Type': 'application/json',
-      }
+      },
+      method: 'GET',
     })
       .then(this._responseHandler);
   }
 
-  addCard(data, jwt) {
+  addCard(data, jwt) {    
     return fetch(`${this._url}cards`, {
       method: 'POST',
       headers: {
+        'content-type': 'application/json',
         authorization: `Bearer ${jwt}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         name: data.name,
@@ -56,47 +55,32 @@ class Api {
     return fetch(`${this._url}cards/${id}`, {
       method: 'DELETE',
       headers: {
+        'content-type': 'application/json',
         authorization: `Bearer ${jwt}`,
-        'Content-Type': 'application/json',
       },
     })
       .then((this._responseHandler));
   }
 
-  // addLike(id) {
-  //   return fetch(`${this._url}cards/likes/${id}`, {
-  //     method: 'PUT',
-  //     headers: this._headers,
-  //   })
-  //   .then(this._responseHandler);
-  // }
-
-  // delLike(id, jwt) {
-  //   return fetch(`${this._url}cards/likes/${id}`, {
-  //     method: 'DELETE',
-  //     headers: this._headers,
-  //   })
-  //   .then(this._responseHandler);
-  // }
-
-  changeLikeCardStatus(id, isLiked, jwt) {
+  changeLikeCardStatus(id, isLiked, jwt) {    
     const method = isLiked ? 'PUT' : 'DELETE';
-    return fetch(`${this._url}cards/likes/${id}`, {
+    return fetch(`${this._url}cards/${id}/likes`, {
       method,
       headers: {
+        'content-type': 'application/json',
         authorization: `Bearer ${jwt}`,
-        'Content-Type': 'application/json',
       },
     })
       .then(this._responseHandler);
   }
 
   setProfile(profile, jwt) {
+    
     return fetch(`${this._url}users/me`, {
       method: 'PATCH',
       headers: {
+        'content-type': 'application/json',
         authorization: `Bearer ${jwt}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         name: profile.name,
@@ -109,8 +93,8 @@ class Api {
     return fetch(`${this._url}users/me/avatar`, {
       method: 'PATCH',
       headers: {
+        'content-type': 'application/json',
         authorization: `Bearer ${jwt}`,
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         avatar: obj.avatar,
@@ -120,14 +104,15 @@ class Api {
   }
 
 }
-
-const api = new Api({
-  // url: 'https://mesto.nomoreparties.co/v1/cohort-16/',
-  url: 'http://api.kolenhen.students.nomoredomains.icu',
-  //  headers: {
-  //    uthorization: 'cbe4503b-5ebe-4451-a159-203687412eb7',
-  //   'Content-Type': 'application/json',
-  // },
+// const api = new Api({
+// url: 'https://mesto.nomoreparties.co/v1/cohort-16/',
+// url: 'http://api.kolenhen.students.nomoredomains.icu/',
+// url: 'http://localhost:3000/',
+//  headers: {
+//    uthorization: 'cbe4503b-5ebe-4451-a159-203687412eb7',
+//   'Content-Type': 'application/json',
+// },
+// });
+export default new Api({
+  url: 'http://api.kolenhen.students.nomoredomains.icu/',
 });
-
-export default api;

@@ -16,7 +16,7 @@ const getUsers = (req, res, next) => {
 };
 
 const getUserByID = (req, res, next) => {
-  User.findById(req.params.id)
+  User.findById(req.user._id)
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Нет пользователя с таким id');
@@ -24,6 +24,17 @@ const getUserByID = (req, res, next) => {
       res.status(200).send(user);
     })
     .catch(next);
+};
+
+const getUser = (req, res, next) => {
+  User.findById(req.user._id)
+    .then((user) => {
+      if (!user) {
+      throw new NotFoundError('Нет пользователя с таким id');
+    }
+    res.status(200).send(user);
+  })
+  .catch(next);
 };
 
 const createUser = (req, res, next) => {
@@ -78,17 +89,17 @@ const login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
-      res.cookie('jwt', token, {
-        maxAge: 3600000 * 24 * 7,
-        httpOnly: true
-      })
+      // res.cookie('jwt', token, {
+      //   maxAge: 3600000 * 24 * 7,
+      //   httpOnly: true
+      // })
         res.status(200)
-        .send({ message: 'авторизация успешна!', email: user.email, token });
+        .send({ message: 'авторизация успешна!', _id: user._id, email: user.email, token });
     })
     .catch(next)
 };
 
 
 module.exports = {
-  getUsers, getUserByID, createUser, userInfoUpdate, userAvatarUpdate, login
+  getUsers, getUserByID, getUser, createUser, userInfoUpdate, userAvatarUpdate, login
 };

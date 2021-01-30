@@ -4,9 +4,8 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 function Card(props) {
 
     const currentUser = React.useContext(CurrentUserContext);
-    const isOwn = props.card.owner._id === currentUser._id;
-    const isLiked = props.card.likes.some(i => i._id === currentUser._id);
-
+    const isOwn = props.card.owner === currentUser._id;
+    const isLiked = props.card.likes.some(i => i === currentUser._id);
     const cardDeleteButtonClassName = (
         `location__trash ${isOwn ? 'location__trash_visible' : 'location__trash_invisible'}`
     );
@@ -58,5 +57,3 @@ function Card(props) {
 }
 
 export default Card;
-
-//https://images.unsplash.com/photo-1602112711460-9431b0cb6d25?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1868&q=80

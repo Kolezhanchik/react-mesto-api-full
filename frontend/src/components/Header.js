@@ -31,14 +31,14 @@ function Header(props) {
       <div className={`header__wrap ${props.loggedIn && windowWidth < 540 ? "header__wrap_loggedin-mob" : ""} header__wrap_email 
       ${props.loggedIn && windowWidth < 540 && (!isMenuOpen ? "" : "header__wrap_hide")}`} >
         {props.loggedIn && (<p className="header__email">{props.userEmail}</p>)}
-        {!props.loggedIn && location.pathname === "/sign-up" &&
-          (<Link to="/sign-in" className="header__link">Войти</Link>)
+        {!props.loggedIn && location.pathname === "/signup" &&
+          (<Link to="/signin" className="header__link">Войти</Link>)
         }
-        {!props.loggedIn && location.pathname === "/sign-in" &&
-          (<Link to="/sign-up" className="header__link">Регистрация</Link>)
+        {!props.loggedIn && location.pathname === "/signin" &&
+          (<Link to="/signup" className="header__link">Регистрация</Link>)
         }
         {props.loggedIn &&
-         ( <Link to="/sign-in" onClick={props.logOut} className="header__link">Выйти</Link>)
+         ( <Link to="/signin" onClick={props.logOut} className="header__link">Выйти</Link>)
         }
       </div>
     </header>
