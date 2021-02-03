@@ -1,7 +1,8 @@
 const notFoundRouter = require('express').Router();
+const { NotFoundError } = require('../middlewares/error-handler');
 
-notFoundRouter.all('*', (req, res) => {
-  res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
+notFoundRouter.all('*', () => {
+  throw new NotFoundError('Запрашиваемый ресурс не найден');
 });
 
 module.exports = notFoundRouter;

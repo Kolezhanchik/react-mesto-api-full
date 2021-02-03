@@ -1,9 +1,9 @@
 const usersRouter = require('express').Router();
 const {
-  getUsers, getUserByID, getUser, userInfoUpdate, userAvatarUpdate
+  getUsers, getUserByID, getUser, userInfoUpdate, userAvatarUpdate,
 } = require('../controllers/users');
 const {
-  getUserByIDValidator, userInfoUpdateValidator, userAvatarUpdateValidator
+  getUserByIDValidator, userInfoUpdateValidator, userAvatarUpdateValidator,
 } = require('../middlewares/celebrate-validator');
 
 usersRouter.get('/', getUsers);

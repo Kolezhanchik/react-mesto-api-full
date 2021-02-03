@@ -1,5 +1,5 @@
 const Card = require('../models/card');
-const { NotFoundError } = require('../middlewares/error-handler');
+const { NotFoundError, WrongIdError, AuthorizedButForbidden } = require('../middlewares/error-handler');
 
 const getCards = (req, res, next) => {
   Card.find({})
@@ -24,8 +24,10 @@ const createCard = (req, res, next) => {
 
 const delCard = (req, res, next) => {
   const _id = req.params.cardId;
+  if (!_id || _id.length !== 24) throw new WrongIdError('Неправильный ID');
   Card.findByIdAndRemove(_id)
     .then((card) => {
+      if (!card.owner.equals(req.user._id)) throw new AuthorizedButForbidden('Попытка удалить/редактировать информацию другого пользователя');
       if (!card) {
         throw new NotFoundError('Нет карточки с таким ID');
       }
@@ -37,15 +39,16 @@ const delCard = (req, res, next) => {
 const addLike = (req, res, next) => {
   const { cardId } = req.params;
   const { _id } = req.user;
+  if (!cardId || cardId.length !== 24) throw new WrongIdError('Неправильный ID');
   Card.findByIdAndUpdate(cardId, {
     $addToSet: {
       likes: _id,
     },
   },
-    {
-      runValidators: true,
-      new: true,
-    })
+  {
+    runValidators: true,
+    new: true,
+  })
     .then((card) => {
       if (!card) {
         throw new NotFoundError('Нет карточки с таким ID');
@@ -57,16 +60,17 @@ const addLike = (req, res, next) => {
 
 const delLike = (req, res, next) => {
   const { cardId } = req.params;
+  if (!cardId || cardId.length !== 24) throw new WrongIdError('Неправильный ID');
   const { _id } = req.user;
   Card.findByIdAndUpdate(cardId, {
     $pull: {
       likes: _id,
     },
   },
-    {
-      runValidators: true,
-      new: true,
-    })
+  {
+    runValidators: true,
+    new: true,
+  })
     .then((card) => {
       if (!card) {
         throw new NotFoundError('Нет карточки с таким ID');

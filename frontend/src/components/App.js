@@ -14,7 +14,6 @@ import InfoTooltip from './InfoTooltip';
 import Login from './Login';
 import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
-import { checkToken } from '../utils/auth';
 import * as auth from '../utils/auth.js';
 
 
@@ -45,18 +44,20 @@ function App() {
     const jwt = localStorage.getItem('jwt');
     if(loggedIn && jwt){
     setIsCardsLoading(true);
-    api.getInitialCards(jwt)
-      .then((data) => {        
-        setCards(data);
+    api.getInitialData(jwt)
+      .then(([user, cards]) => {        
+        setCards(cards);
+        setCurrentUser(user);
       })
       .catch((error) => { alert(error) })
       .finally(() => {
         setIsCardsLoading(false);
+        history.push('/');
       });
     }
-  }, [loggedIn]);
+  }, [loggedIn, history]);
 
-  useEffect(() => {
+  const getUser = useCallback(() => {
     const jwt = localStorage.getItem('jwt');      
     if(loggedIn && jwt){   
     api.getInitialProfile(jwt)
@@ -65,10 +66,11 @@ function App() {
       })
       .catch((error) => { alert(error) });
     }
-  }, [loggedIn]);
+  },
+    [loggedIn, setCurrentUser]
+  )
 
-
-  // popup closing by ESC
+ // popup closing by ESC
   useEffect(() => {
     function handleEscClose(event) {
       if (event.key === "Escape") {
@@ -127,26 +129,24 @@ function App() {
     const jwt = localStorage.getItem('jwt');    
     setIsUserSaving(true);
     api.setProfile(data, jwt)
-      .then(
-        (data) => {
-          setCurrentUser(data);
+      .then(() => {
           closeAllPopups();
         })
       .catch((error) => { alert(error) })
       .finally(() => {
         setIsUserSaving(false);
       });
+      getUser();
   }
 
-  function handleUpdateAvatar(data) {
+    function handleUpdateAvatar(data) {
     const jwt = localStorage.getItem('jwt');
     api.setProfileAvatar(data, jwt)
-      .then(
-        (data) => {
-          setCurrentUser(data);
+      .then(() => {
           closeAllPopups();
         })
       .catch((error) => { alert(error) });
+      getUser();
   }
 
   function handleCardLike(card) {
@@ -193,17 +193,18 @@ function App() {
   function handleLogOut() {
     setLoggedIn(false);
     localStorage.removeItem('jwt');
-    history.push('/signin');
+    history.push('/sign-in');
   }
 
   const handleTokenCheck = useCallback(() => {
-    if (localStorage.getItem('jwt')) {
-      const jwt = localStorage.getItem('jwt');
+    const jwt = localStorage.getItem('jwt');
+     if (jwt) {     
       if (loggedIn && jwt) {
-        checkToken(jwt)
+        auth.checkToken(jwt)
           .then((res) => {
             if (res) {
               setCurrentUserEmail(res.email);
+              console.log(jwt, res.email);
               setLoggedIn(true);
               history.push('/');
             }
@@ -213,10 +214,19 @@ function App() {
   },
     [history, setLoggedIn, loggedIn, setCurrentUserEmail]
   )
+  
+  useEffect(() => {
+    function handleRefresh() {
+      handleTokenCheck();
+      setLoggedIn(true);
+    }
+    window.addEventListener("DOMContentLoaded", handleRefresh);
+    return () => window.removeEventListener("DOMContentLoaded", handleRefresh);
+  }, []);
+
 
   useEffect(() => {
-    const token = localStorage.getItem('jwt');
-    
+    const token = localStorage.getItem('jwt');    
     if (token) {
       handleTokenCheck();
     }
@@ -244,7 +254,7 @@ function App() {
           handleTooltipOpen();
           setTooltipMessage('Вы успешно зарегистрировались!');
           setTooltipType('positive');
-          history.push('/signin');
+          history.push('/sign-in');
           resetForm();
         }
         else {
@@ -263,7 +273,7 @@ function App() {
         userEmail={currentUserEmail}
       />
       <Switch>
-        <Route path="/signup">
+        <Route path="/sign-up">
           <Register
             onTooltipOpen={handleTooltipOpen}
             message={setTooltipMessage}
@@ -271,7 +281,7 @@ function App() {
             handleRegister={handleRegister}
           />
         </Route>
-        <Route path="/signin">
+        <Route path="/sign-in">
           <Login
             handleLogin={handleLogin}
           />
@@ -279,6 +289,7 @@ function App() {
         <ProtectedRoute
           path="/"
           component={Main}
+          currentUser = {currentUser}
           loggedIn={loggedIn}
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}

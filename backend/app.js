@@ -4,6 +4,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+
 const app = express();
 const mongoose = require('mongoose');
 const usersRouter = require('./routes/users');
@@ -47,14 +48,13 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-
 app.post('/signup', createUserValidator, createUser);
 app.post('/signin', loginValidator, login);
 
 // app.use(auth);
-
 app.use('/users', auth, usersRouter);
 app.use('/cards', auth, cardsRouter);
+
 app.use(errorLogger);
 app.use(celebrateErrorHandler);
 app.use(errorsHandler);
