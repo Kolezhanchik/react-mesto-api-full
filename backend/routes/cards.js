@@ -4,7 +4,7 @@ const {
 } = require('../controllers/cards');
 
 const {
-  createCardValidator, delCardValidator, addLikeValidator, delLikeValidator
+  createCardValidator, delCardValidator, addLikeValidator, delLikeValidator,
 } = require('../middlewares/celebrate-validator');
 
 cardsRouter.get('/', getCards);

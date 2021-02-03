@@ -1,7 +1,10 @@
-const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { NotFoundError, UnauthorizedError, Conflict, badRequestError } = require('../middlewares/error-handler');
+const User = require('../models/user');
+const {
+  NotFoundError, UnauthorizedError, WrongIdError, Conflict, BadRequestError,
+} = require('../middlewares/error-handler');
+
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 const getUsers = (req, res, next) => {
@@ -16,7 +19,9 @@ const getUsers = (req, res, next) => {
 };
 
 const getUserByID = (req, res, next) => {
-  User.findById(req.user._id)
+  const userId = req.params.id;
+  if (!userId || userId.length !== 24) throw new WrongIdError('Неправильный ID');
+  User.findById(userId)
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Нет пользователя с таким id');
@@ -30,29 +35,31 @@ const getUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-      throw new NotFoundError('Нет пользователя с таким id');
-    }
-    res.status(200).send(user);
-  })
-  .catch(next);
-};
-
-const createUser = (req, res, next) => {
-  const { name, about, avatar, email, password } = req.body;
-  if (!email || !password) { throw new badRequestError('Не предоставлены email или пароль');}
-  User.findOne({email})
-  .then((user) => {
-    if(user) throw new Conflict('Пользователь с таким email адресом уже зарегистрирован');
-  })
-  bcrypt.hash(password, 10)
-  .then((hash) =>
-    User.create({ name, about, avatar, email, password: hash })
-    .then(({_id, email}) => {
-      res.status(200).send({_id, email});
-    }))
+        throw new NotFoundError('Нет пользователя с таким id');
+      }
+      res.status(200).send(user);
+    })
     .catch(next);
 };
 
+const createUser = (req, res, next) => {
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
+  if (!email || !password) { throw new BadRequestError('Не предоставлены email или пароль'); }
+  User.findOne({ email })
+    .then((user) => {
+      if (user) throw new Conflict('Пользователь с таким email адресом уже зарегистрирован');
+    });
+  bcrypt.hash(password, 10)
+    .then((hash) => User.create({
+      name, about, avatar, email, password: hash,
+    })
+      .then(({ _id }) => {
+        res.status(200).send({ _id, email });
+      }))
+    .catch(next);
+};
 
 const userInfoUpdate = (req, res, next) => {
   const { name, about } = req.body;
@@ -85,7 +92,7 @@ const userAvatarUpdate = (req, res, next) => {
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
-  if(!email||!password) {  throw new UnauthorizedError('Неправильный логин и/или пароль')};
+  if (!email || !password) { throw new UnauthorizedError('Неправильный логин и/или пароль'); }
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
@@ -93,13 +100,14 @@ const login = (req, res, next) => {
       //   maxAge: 3600000 * 24 * 7,
       //   httpOnly: true
       // })
-        res.status(200)
-        .send({ message: 'авторизация успешна!', _id: user._id, email: user.email, token });
+      res.status(200)
+        .send({
+          message: 'авторизация успешна!', _id: user._id, email: user.email, token,
+        });
     })
-    .catch(next)
+    .catch(next);
 };
 
-
 module.exports = {
-  getUsers, getUserByID, getUser, createUser, userInfoUpdate, userAvatarUpdate, login
+  getUsers, getUserByID, getUser, createUser, userInfoUpdate, userAvatarUpdate, login,
 };

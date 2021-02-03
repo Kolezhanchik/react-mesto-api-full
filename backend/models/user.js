@@ -1,4 +1,5 @@
-/* eslint-disable no-useless-escape */
+/* eslint-disable no-useless-escape, func-names, consistent-return */
+
 const mongoose = require('mongoose');
 const validatoion = require('validator');
 const bcrypt = require('bcryptjs');
@@ -22,8 +23,8 @@ const userSchema = new mongoose.Schema({
     validate: {
       validator(v) {
         // eslint-disable-next-line max-len
-       // return /https?:\/\/(www\.)?[-a-zA-Z0-9]{2,256}\.[a-z]{1,6}\b([-a-zA-Z0-9-._~:\/?#\[\]@!$&'()*+,;=\S]*)/.test(v);
-       return validatoion.isURL(v);
+        // return /https?:\/\/(www\.)?[-a-zA-Z0-9]{2,256}\.[a-z]{1,6}\b([-a-zA-Z0-9-._~:\/?#\[\]@!$&'()*+,;=\S]*)/.test(v);
+        return validatoion.isURL(v);
       },
       message: 'URL введён некорректно.',
     },
@@ -33,33 +34,33 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     validate: {
-      validator(v){
+      validator(v) {
         return validatoion.isEmail(v);
       },
       message: 'Email введён некорректно.',
-    }
+    },
   },
   password: {
     type: String,
     required: true,
     minlength: 5,
-    select: false
-  }
+    select: false,
+  },
 });
 
-userSchema.statics.findUserByCredentials = function(email, password){
-  return this.findOne({email}).select('+password')
-  .then((user) => {
-    if(!user){
-      return Promise.reject(new Error('Неправильные почта или пароль'));
-    }
-    return bcrypt.compare(password, user.password)
-    .then((matched) => {
-      if(matched){
-        return user;
+userSchema.statics.findUserByCredentials = function (email, password) {
+  return this.findOne({ email }).select('+password')
+    .then((user) => {
+      if (!user) {
+        return Promise.reject(new Error('Неправильные почта или пароль'));
       }
-    })
-  })
-}
+      return bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (matched) {
+            return user;
+          }
+        });
+    });
+};
 
 module.exports = mongoose.model('user', userSchema);

@@ -74,22 +74,18 @@ class Api {
       .then(this._responseHandler);
   }
 
-  setProfile(profile, jwt) {
-    
-    return fetch(`${this._url}users/me`, {
+  setProfile({name, about}, jwt) {
+     return fetch(`${this._url}users/me`, {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json',
         authorization: `Bearer ${jwt}`,
       },
-      body: JSON.stringify({
-        name: profile.name,
-        about: profile.about,
-      }),
+      body: JSON.stringify({name, about}),
     }).then(this._responseHandler);
   }
 
-  setProfileAvatar(obj, jwt) {
+  setProfileAvatar({avatar}, jwt) {
     return fetch(`${this._url}users/me/avatar`, {
       method: 'PATCH',
       headers: {
@@ -97,7 +93,7 @@ class Api {
         authorization: `Bearer ${jwt}`,
       },
       body: JSON.stringify({
-        avatar: obj.avatar,
+        avatar:avatar,
       }),
     })
       .then(this._responseHandler);
@@ -114,5 +110,5 @@ class Api {
 // },
 // });
 export default new Api({
-  url: 'http://api.kolenhen.students.nomoredomains.icu/',
+  url: 'https://api.kolenhen.students.nomoredomains.icu/',
 });

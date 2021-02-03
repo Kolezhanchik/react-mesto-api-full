@@ -1,12 +1,9 @@
 const { isCelebrateError } = require('celebrate');
+const { BadRequestError } = require('./error-handler');
 
-const celebrateErrorHandler = (err, req, res, next) => {
-  if (isCelebrateError(err)) {
-    res.status(400).send({
-      message: 'Переданные данные не корректны',
-    });
-  }
-  next(err);
+const celebrateErrorHandler = (err, next) => {
+  if (isCelebrateError(err)) throw new BadRequestError('Переданные данные не корректны');
+  next();
 };
 
 module.exports = celebrateErrorHandler;
