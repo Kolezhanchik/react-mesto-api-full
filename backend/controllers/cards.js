@@ -22,34 +22,18 @@ const createCard = (req, res, next) => {
     .catch(next);
 };
 
-// const delCard = (req, res, next) => {
-//   const userId = req.user.id;
-//   const cardId = req.params.cardId;
-//   Card.findById(cardId)
-//     .orFail(new NotFoundError('Нет карточки с таким ID'))
-//     .then((card) => {
-//       const cardOwnerId = card.owner.toString();
-//       if (cardOwnerId !== userId) {
-//         throw new AuthorizedButForbidden('Попытка удалить/редактировать информацию другого пользователя');
-//       }
-//       return Card.findByIdAndRemove(cardId)
-//         .then((deletedCard) => res.status(200).send(deletedCard));
-//     })
-//     .catch(next);
-// };
-
 const delCard = (req, res, next) => {
-  console.log(req);
-  const _id = req.params.cardId;
-
-  if (!_id || _id.length !== 24) throw new WrongIdError('Неправильный ID');
-  if (!card.owner.equals(req.user._id)) throw new AuthorizedButForbidden('Попытка удалить/редактировать информацию другого пользователя');
-  Card.findByIdAndRemove(_id)
+  const userId = req.user.id;
+  const cardId = req.params.cardId;
+  Card.findById(cardId)
+    .orFail(new NotFoundError('Нет карточки с таким ID'))
     .then((card) => {
-      if (!card) {
-        throw new NotFoundError('Нет карточки с таким ID');
+      const cardOwnerId = card.owner.toString();
+      if (cardOwnerId !== userId) {
+        throw new AuthorizedButForbidden('Попытка удалить/редактировать информацию другого пользователя');
       }
-      res.status(200).send(card);
+      return Card.findByIdAndRemove(cardId)
+        .then((deletedCard) => res.status(200).send(deletedCard));
     })
     .catch(next);
 };
