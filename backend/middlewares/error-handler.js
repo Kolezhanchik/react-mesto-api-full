@@ -5,14 +5,20 @@ const errorsHandler = (err, req, res, next) => {
     statusCode: err.statusCode,
     message: err.message,
   };
-
+console.log(err);
   switch (err.name) {
     case 'Error': {
-      error.statusCode = 404;
+      error.statusCode = 400;
       error.name = 'BadRequestError';
       error.message = err.message || 'Неверный запрос';
     }
       break;
+      case 'UnauthorizedError': {
+        error.statusCode = 401;
+        error.name = 'UnauthorizedError';
+        error.message = 'Неверный email и/или пароль';
+      }
+        break;
     case 'ValidationError': {
       error.statusCode = 401;
       error.name = 'ValidationError';
@@ -20,9 +26,9 @@ const errorsHandler = (err, req, res, next) => {
     }
       break;
     case 'TypeError': {
-      error.statusCode = 401;
+      error.statusCode = 404;
       error.name = 'ValidationError';
-      error.message = 'значение имеет не ожидаемый тип';
+      error.message = 'Запрашиваемый ресурс не найден';
     }
       break;
     case 'Forbidden': {

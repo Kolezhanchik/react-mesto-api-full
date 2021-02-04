@@ -1,6 +1,4 @@
 const { celebrate, Joi } = require('celebrate');
-// /https?:\/\/(www\.)?[-a-zA-Z0-9]{2,256}\.[a-z]{1,6}\b([-a-zA-Z0-9-._~:\/?#\[\]@!$&'()*+,;=\S]*)/
-// /^(https?:\/\/)?([\da-z.-]+).([a-z.]{2,6})([/\w.-]*)*\/?$/
 
 const loginValidator = celebrate({
   body: Joi.object().keys({
@@ -15,7 +13,7 @@ const createUserValidator = celebrate({
     password: Joi.string().required().min(5),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().regex(/https?:\/\/(www\.)?[-a-zA-Z0-9]{2,256}\.[a-z]{1,6}\b([-a-zA-Z0-9-._~:\/?#\[\]@!$&'()*+,;=\S]*)/),
+    avatar: Joi.string().regex(/^(https?:\/\/)?([\w-]{1,32}\.[\w-]{1,32})[^\s@]*$/),
   }),
 });
 
@@ -34,14 +32,14 @@ const userInfoUpdateValidator = celebrate({
 
 const userAvatarUpdateValidator = celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().required().regex(/https?:\/\/(www\.)?[-a-zA-Z0-9]{2,256}\.[a-z]{1,6}\b([-a-zA-Z0-9-._~:\/?#\[\]@!$&'()*+,;=\S]*)/),
+    avatar: Joi.string().required().regex(/^(https?:\/\/)?([\w-]{1,32}\.[\w-]{1,32})[^\s@]*$/),
   }),
 });
 
 const createCardValidator = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30).required(),
-    link: Joi.string().regex(/https?:\/\/(www\.)?[-a-zA-Z0-9]{2,256}\.[a-z]{1,6}\b([-a-zA-Z0-9-._~:\/?#\[\]@!$&'()*+,;=\S]*)/).required(),
+    link: Joi.string().regex(/^(https?:\/\/)?([\w-]{1,32}\.[\w-]{1,32})[^\s@]*$/).required(),
   }),
 });
 
@@ -53,7 +51,7 @@ const delCardValidator = celebrate({
 
 const addLikeValidator = celebrate({
   body: Joi.object().keys({
-    cardId: Joi.string().hex().length(24),
+    id: Joi.string().hex().length(24),
   }),
 });
 
