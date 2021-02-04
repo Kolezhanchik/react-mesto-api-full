@@ -5,7 +5,7 @@ const errorsHandler = (err, req, res, next) => {
     statusCode: err.statusCode,
     message: err.message,
   };
-console.log(err);
+console.log(error);
   switch (err.name) {
     case 'Error': {
       error.statusCode = 400;
