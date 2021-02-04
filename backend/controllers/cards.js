@@ -29,7 +29,6 @@ const delCard = (req, res, next) => {
     .orFail(new NotFoundError('Нет карточки с таким ID'))
     .then((card) => {
       const cardOwnerId = card.owner.toString();
-      console.log(card.owner);
       if (cardOwnerId !== userId) {
         throw new AuthorizedButForbidden('Попытка удалить/редактировать информацию другого пользователя');
       }
