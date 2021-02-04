@@ -23,12 +23,13 @@ const createCard = (req, res, next) => {
 };
 
 const delCard = (req, res, next) => {
-  const userId = req.user.id;
+  const userId = req.user._id;
   const cardId = req.params.cardId;
   Card.findById(cardId)
     .orFail(new NotFoundError('Нет карточки с таким ID'))
     .then((card) => {
       const cardOwnerId = card.owner.toString();
+      console.log(card.owner);
       if (cardOwnerId !== userId) {
         throw new AuthorizedButForbidden('Попытка удалить/редактировать информацию другого пользователя');
       }
