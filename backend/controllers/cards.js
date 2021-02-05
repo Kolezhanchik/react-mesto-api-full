@@ -24,7 +24,7 @@ const createCard = (req, res, next) => {
 
 const delCard = (req, res, next) => {
   const userId = req.user._id;
-  const cardId = req.params.cardId;
+  const { cardId } = req.params;
   Card.findById(cardId)
     .orFail(new NotFoundError('Нет карточки с таким ID'))
     .then((card) => {
