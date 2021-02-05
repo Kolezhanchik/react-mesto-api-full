@@ -58,7 +58,7 @@ const addLikeValidator = celebrate({
 const delLikeValidator = celebrate({
   body: Joi.object().keys({
     id: Joi.string().hex().length(24),
-  }),
+  }).unknown(true)
 });
 
 module.exports = {

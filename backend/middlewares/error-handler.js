@@ -5,24 +5,48 @@ const errorsHandler = (err, req, res, next) => {
     statusCode: err.statusCode,
     message: err.message,
   };
-console.log(error);
-  switch (err.name) {
-    case 'Error': {
-      error.statusCode = 400;
-      error.name = 'BadRequestError';
+  console.log(err, error);
+  switch (err.name && err.statusCode) {
+    case ('Error' && 404): {
+      error.statusCode = 404;
+      error.name = '';
       error.message = err.message || 'Неверный запрос';
     }
       break;
-      case 'UnauthorizedError': {
-        error.statusCode = 401;
-        error.name = 'UnauthorizedError';
-        error.message = 'Неверный email и/или пароль';
-      }
-        break;
+    case ('Error' && 400): {
+      error.statusCode = 400;
+      error.name = '';
+      error.message = err.message || 'Неверный запрос';
+    }
+      break;
+    case ('Error' && 403): {
+      error.statusCode = 403;
+      error.name = '';
+      error.message = err.message || 'Неверный запрос';
+    }
+      break;
+    case ('Error' && 401): {
+      error.statusCode = 401;
+      error.name = '';
+      error.message = err.message || 'Неверный запрос';
+    }
+      break;
+    case ('Error' && undefined): {
+      error.statusCode = 400;
+      error.name = 'BadRequestError';
+      error.message = 'Неверный запрос';
+    }
+      break;
+    case 'UnauthorizedError': {
+      error.statusCode = 401;
+      error.name = 'UnauthorizedError';
+      error.message = 'Неверный email и/или пароль';
+    }
+      break;
     case 'ValidationError': {
       error.statusCode = 401;
       error.name = 'ValidationError';
-      error.message = 'Неверный запрос 401';
+      error.message = 'Неверный запрос';
     }
       break;
     case 'TypeError': {
