@@ -60,13 +60,9 @@ userSchema.statics.findUserByCredentials = function (email, password) {
           if (!matched) {
             return Promise.reject(new UnauthorizedError('Неверный email или пароль'));
           }
-            return user;
-
+          return user;
         });
     });
 };
-
-
-
 
 module.exports = mongoose.model('user', userSchema);
